@@ -40,4 +40,4 @@ export default {
     onChangeEvent: "msfullscreenChange",
     onErrorEvent: "msfullscreenError",
   },
-};
+}
