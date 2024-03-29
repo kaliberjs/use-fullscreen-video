@@ -23,24 +23,37 @@ Optionally add a bit of text describing why this library exists.
 ## Installation
 
 ```
-yarn add @kaliber/library
+yarn add @kaliber/use-fullscreen-video
 ```
 
 ## Usage
-Short example. If your library has multiple ways to use it, show the most used one and refer to `/example` for further examples.
-
 ```jsx
-import { hello } from 'library'
+import { useFullscreenElement } from '@kaliber/use-fullscreen-video'
 
 function Component() {
-  return <div>{hello()}</div>
+    const { refs, request, exit } = useFullscreenVideo({
+    onChange: console.debug,
+    onError: console.error
+  })
+
+  return (
+    <main>
+      <div ref={refs.setContainer}>
+        <Video ref={refs.setVideo} src={neverGonnaGiveYouUp} />
+        <button onClick={exit}>
+          Exit fullscreen
+        </button>
+      </div>
+
+      <button onClick={request}>
+        Request fullscreen
+      </button>
+    </main>
+  )
 }
 ```
-
-# Reference
-Optionally add a reference, if your library needs it.
-
-![](https://media.giphy.com/media/find-a-good-gif/giphy.gif)
+ 
+![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExODBxajhkc2g1Y3dpaGY1ZWZ5NzAwdnV3eXJpY3pxaWVhMHRodmYyMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l4pThMAKS4BOtz8d2/giphy.gif)
 
 ## Disclaimer
 This library is intended for internal use, we provide __no__ support, use at your own risk. It does not import React, but expects it to be provided, which [@kaliber/build](https://kaliberjs.github.io/build/) can handle for you.
