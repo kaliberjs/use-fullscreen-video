@@ -1,28 +1,11 @@
-# BEFORE YOU PUBLISH
-- Read [Libraries van Kaliber](https://docs.google.com/document/d/1FrJi-xWtKkbocyMVK5A5_hupjl5E4gD4rDvATDlxWyc/edit#heading=h.bb3md3gyf493).
-- Make sure your example works.
-- Make sure your package.json is correct. Have you change the library title?
-- Update the bin/postInstall script. It should refer to your library.
-- Update the `<title>` tag in `index.html.js`.
-- Remove 'BEFORE YOU PUBLISH' and 'PUBLISHING' from this document.
-
-# PUBLISHING
-- Make sure you are added to the kaliber organization on NPM
-- run `yarn publish`
-- Enter a correct version, we adhere to semantic versioning (semver)
-- run `git push`
-- run `git push --tags`
-- Send everybody an email to introduce them to your library!
-
-# Library title
-Short description.
+# useFullscreenVideo
+Simplified cross-browser fullscreen video behavior.
 
 ## Motivation
-Optionally add a bit of text describing why this library exists.
+This React hook simplifies the process of managing fullscreen video playback across different browsers, handling the complexities of vendor-specific APIs for you. It also handles the fallback scenario, in case the browser (e.g. `iOS Safari`) does not support setting a `HTMLDivElement` to fullscreen (but does allow `HTMLVideoElement` to do so).
 
 ## Installation
-
-```
+```bash
 yarn add @kaliber/use-fullscreen-video
 ```
 
@@ -52,6 +35,28 @@ function Component() {
   )
 }
 ```
+
+### Hook Options
+The `useFullscreenVideo` hook accepts an options object:
+
+* **onChange(event):** A callback function that is triggered whenever the fullscreen state changes. The `isFullscreen` argument will be an `Event`.
+* **onError(error):** A callback function invoked if an error occurs during fullscreen transitions. The `error` argument will contain the error details.
+
+### Returned Values
+
+The hook returns an object containing the following:
+
+* **refs:** An object with `setContainer` and `setVideo` setters for assigning references to the container element and video element, respectively. 
+* **element:** The DOM element that is currently in fullscreen mode (if any).
+* **isFullscreen:** A boolean value indicating whether the video is in fullscreen mode.
+* **isEnabled:** A boolean value indicating whether fullscreen functionality is supported by the browser.
+
+### API
+The `useFullscreenVideo` hook exposes the following methods:
+
+* **`request(options)`:** Initiates a fullscreen request on either the designated container or the video element itself, depending on browser implementation. The `options` argument allows for potential browser-specific configuration.
+* **`exit()`:** Exits the fullscreen mode.
+
  
 ![](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExODBxajhkc2g1Y3dpaGY1ZWZ5NzAwdnV3eXJpY3pxaWVhMHRodmYyMyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l4pThMAKS4BOtz8d2/giphy.gif)
 
