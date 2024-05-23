@@ -58,7 +58,7 @@ function Component() {
         <ReactPlayer 
           ref={videoRef} 
           // Make sure you add a `src` that uses ReactPlayer's `FilePlayer`:
-          src={neverGonnaGiveYouUp} 
+          url={neverGonnaGiveYouUp} 
           onReady={() => {
             // Video ref is only available when video is ready:
             const videoPlayerElement = videoRef.current.getInternalPlayer()
