@@ -3,12 +3,13 @@ import { useEvent } from "./machinery/useEvent"
 import engines from "./engines"
 
 export function useFullscreenVideo({ onChange, onError }) {
-  const keysRef = React.useRef(engines.chromium)
-  const keys = keysRef.current
+  const [keys, setKeys] = React.useState(engines.chromium)
 
   const videoRef = React.useRef(/** @type {HTMLElement|null} */ (null))
   const containerRef = React.useRef(/** @type {HTMLVideoElement|null} */ (null))
 
+  const { useVideoElement } = options ?? {}
+  
   useEventListener(keys.onChangeEvent, onChange)
   useEventListener(keys.onErrorEvent, onError)
 
@@ -21,7 +22,7 @@ export function useFullscreenVideo({ onChange, onError }) {
         return element && methods?.request in element
       })
 
-      if (data) keysRef.current = data 
+      if (data) setKeys(data)
 
       refElement.current = element
     };
@@ -32,9 +33,9 @@ export function useFullscreenVideo({ onChange, onError }) {
       setContainer: /** @type {(x: HTMLElement) => void} */ (setRef(containerRef)),
       setVideo: /** @type {(x: HTMLVideoElement) => void} */ (setRef(videoRef)),
     },
-    element: document[keys.element],
-    isFullscreen: Boolean(document[keys.element]),
-    isEnabled: Boolean(document[keys.enabled]),
+    getElement: () => document[keys.element],
+    isFullscreen: () => Boolean(document[keys.element]),
+    isEnabled: () => Boolean(document[keys.enabled]),
     request: onRequestEvent,
     exit: onExitEvent,
   }
@@ -45,7 +46,7 @@ export function useFullscreenVideo({ onChange, onError }) {
     if (containerRef.current === null) return
     if (videoRef.current === null) return
 
-    return isTargetSupported
+    return isTargetSupported && !useVideoElement
       ? containerRef.current[keys.request](options)
       : videoRef.current[keys.request](options)
   }
