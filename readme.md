@@ -11,7 +11,7 @@ yarn add @kaliber/use-fullscreen-video
 
 ## Usage
 ```jsx
-import { useFullscreenElement } from '@kaliber/use-fullscreen-video'
+import { useFullscreenVideo } from '@kaliber/use-fullscreen-video'
 
 function Component() {
   const { refs, request, exit } = useFullscreenVideo({
@@ -42,7 +42,7 @@ Make sure you have access to the internal `video` element for the broadest cross
 
 #### using `ReactPlayer`
 ```jsx
-import { useFullscreenElement } from '@kaliber/use-fullscreen-video'
+import { useFullscreenVideo } from '@kaliber/use-fullscreen-video'
 import ReactPlayer from 'react-player'
 
 function Component() {
