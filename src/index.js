@@ -2,7 +2,7 @@ import { useEventListener } from "./machinery/useEventListener"
 import { useEvent } from "./machinery/useEvent"
 import engines from "./engines"
 
-export function useFullscreenVideo({ onChange, onError }) {
+export function useFullscreenVideo({ options, onChange, onError }) {
   const [keys, setKeys] = React.useState(engines.chromium)
 
   const videoRef = React.useRef(/** @type {HTMLElement|null} */ (null))
