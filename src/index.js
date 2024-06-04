@@ -33,11 +33,22 @@ export function useFullscreenVideo({ onChange, onError, options = undefined }) {
       setContainer: /** @type {(x: HTMLElement) => void} */ (setRef(containerRef)),
       setVideo: /** @type {(x: HTMLVideoElement) => void} */ (setRef(videoRef)),
     },
+    isFullscreen,
     getElement: () => document[keys.element],
-    isFullscreen: () => Boolean(document[keys.element]),
     isEnabled: () => Boolean(document[keys.enabled]),
     request: onRequestEvent,
     exit: onExitEvent,
+    toggle
+  }
+
+  function toggle() {
+    isFullscreen() 
+      ? onExitEvent() 
+      : onRequestEvent()
+  }
+
+  function isFullscreen() {
+    return Boolean(document[keys.element])
   }
 
   function handleRequest(options) {
