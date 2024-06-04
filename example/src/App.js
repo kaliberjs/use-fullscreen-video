@@ -1,9 +1,9 @@
-import { useFullscreenElement } from '@kaliber/useFullscreenElement'
+import { useFullscreenVideo } from '../../src/index'
 
 const neverGonnaGiveYouUp = 'https://ia801509.us.archive.org/10/items/Rick_Astley_Never_Gonna_Give_You_Up/Rick_Astley_Never_Gonna_Give_You_Up.mp4'
 
 export default function App() {
-  const { refs, request, exit } = useFullscreenElement({
+  const { refs, request, exit } = useFullscreenVideo({
     onChange: console.debug,
     onError: console.error
   })
@@ -31,7 +31,7 @@ function VideoImpl({ src }, ref) {
       muted
       autoPlay
       playsInline
-      {...{ ref, src }} 
+      {...{ ref, src }}
     />
   )
 }
