@@ -1,30 +1,35 @@
-import { useEventListener } from "./machinery/useEventListener"
+import { eventListenerAttributeId, useEventListener } from "./machinery/useEventListener"
 import { useEvent } from "./machinery/useEvent"
+import { useId } from "./machinery/useId"
+
 import engines from "./engines"
 
 export function useFullscreenVideo({ onChange, onError, options = undefined }) {
   const [keys, setKeys] = React.useState(engines.chromium)
+  const id = useId()
 
   const videoRef = React.useRef(/** @type {HTMLElement|null} */ (null))
   const containerRef = React.useRef(/** @type {HTMLVideoElement|null} */ (null))
 
   const { useVideoElement } = options ?? {}
-  
-  useEventListener(keys.onChangeEvent, onChange)
-  useEventListener(keys.onErrorEvent, onError)
+
+  useEventListener(id, keys.onChangeEvent, onChange)
+  useEventListener(id, keys.onErrorEvent, onError)
 
   const onRequestEvent = useEvent(handleRequest)
   const onExitEvent = useEvent(handleExit)
 
-  const setRef = React.useCallback((refElement) => {
-    return (element) => {
-      const data = Object.values(engines).find((methods) => {
-        return element && methods?.request in element
-      })
+  const setRef = React.useCallback(ref => {
+    return element => {
+      if (!element) return
 
+      const data = getMethodsForElement(element)
       if (data) setKeys(data)
 
-      refElement.current = element
+      if (ref.current === null) {
+        element?.setAttribute(eventListenerAttributeId, id)
+        ref.current = element
+      }
     };
   }, [])
 
@@ -34,21 +39,27 @@ export function useFullscreenVideo({ onChange, onError, options = undefined }) {
       setVideo: /** @type {(x: HTMLVideoElement) => void} */ (setRef(videoRef)),
     },
     isFullscreen,
-    getElement: () => document[keys.element],
-    isEnabled: () => Boolean(document[keys.enabled]),
+    getElement,
+    isEnabled,
     request: onRequestEvent,
     exit: onExitEvent,
     toggle
   }
 
   function toggle() {
-    isFullscreen() 
-      ? onExitEvent() 
-      : onRequestEvent()
+    return isFullscreen() ? onExitEvent() : onRequestEvent()
   }
 
   function isFullscreen() {
     return Boolean(document[keys.element])
+  }
+
+  function getElement() {
+    return document[keys.element]
+  }
+
+  function isEnabled() {
+    return Boolean(document[keys.enabled])
   }
 
   function handleRequest(options) {
@@ -58,12 +69,18 @@ export function useFullscreenVideo({ onChange, onError, options = undefined }) {
     if (videoRef.current === null) return
 
     return isTargetSupported && !useVideoElement
-      ? containerRef.current[keys.request](options)
-      : videoRef.current[keys.request](options)
+      ? containerRef.current[keys.request](options)?.catch(onError)
+      : videoRef.current[keys.request](options)?.catch(onError)
   }
 
   function handleExit() {
     if (!document[keys.element]) return
-    return document[keys.exit]()
+    return document[keys.exit]()?.catch(onError)
   }
 } 
+
+function getMethodsForElement(x) {
+  return Object.values(engines).find((methods) => (
+    x && methods?.request in x
+  ))
+}
