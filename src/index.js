@@ -6,6 +6,7 @@ import engines from "./engines"
 
 export function useFullscreenVideo({ onChange, onError, options = undefined }) {
   const [keys, setKeys] = React.useState(engines.chromium)
+  const isFullscreenRef = React.useRef(false)
   const id = useId()
 
   const videoRef = React.useRef(/** @type {HTMLElement|null} */ (null))
@@ -13,11 +14,11 @@ export function useFullscreenVideo({ onChange, onError, options = undefined }) {
 
   const { useVideoElement } = options ?? {}
 
-  useEventListener({ id, name: keys.onChangeEvent, callback: onChange })
+  useEventListener({ id, name: keys.onChangeEvent, callback: onChangeWithState })
   useEventListener({ id, name: keys.onErrorEvent, callback: onError })
 
-  useEventListener({ id, element: videoRef.current, name: keys.onStartEvent, callback: onChange })
-  useEventListener({ id, element: videoRef.current, name: keys.onEndEvent, callback: onChange })
+  useEventListener({ id, element: videoRef.current, name: keys.onStartEvent, callback: onChangeWithState })
+  useEventListener({ id, element: videoRef.current, name: keys.onEndEvent, callback: onChangeWithState })
 
   const onRequestEvent = useEvent(handleRequest)
   const onExitEvent = useEvent(handleExit)
@@ -33,7 +34,7 @@ export function useFullscreenVideo({ onChange, onError, options = undefined }) {
         element?.setAttribute(eventListenerAttributeId, id)
         ref.current = element
       }
-    };
+    }
   }, [])
 
   return {
@@ -79,6 +80,11 @@ export function useFullscreenVideo({ onChange, onError, options = undefined }) {
   function handleExit() {
     if (!document[keys.element]) return
     return document[keys.exit]()?.catch(onError)
+  }
+
+  function onChangeWithState(event) {
+    isFullscreenRef.current = !isFullscreenRef.current
+    onChange({ state: { isFullscreen: isFullscreenRef.current }, event })
   }
 }
 

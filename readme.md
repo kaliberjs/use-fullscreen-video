@@ -82,7 +82,7 @@ function Component() {
 The `useFullscreenVideo` hook accepts an options object:
 
 * **options:** Configure wether you would like to open the element or the container through the `useVideoElement` option in this object.
-* **onChange(event):** A callback function that is triggered whenever the fullscreen state changes. The `isFullscreen` argument will be an `Event`.
+* **onChange({ state, event }):** A callback function that is triggered whenever the fullscreen state changes. The `isFullscreen` argument will be both the state of the fullscreen functionality, and the original `Event` in an object.
 * **onError(error):** A callback function invoked if an error occurs during fullscreen transitions. The `error` argument will contain the error details.
 
 ### Returned Values
