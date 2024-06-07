@@ -1,16 +1,16 @@
 export const eventListenerAttributeId = 'data-fullscreen-id'
 
-export function useEventListener(id, name, callback) {
+export function useEventListener({ id, name, element = undefined, callback }) {
   React.useEffect(
     () => {
       if (name && callback) {
-        document.addEventListener(name, catchCallback, false)
+        (element ?? document).addEventListener(name, catchCallback, false)
       }
 
       return () => {
-        document.removeEventListener(name, catchCallback, false)
+        (element ?? document).removeEventListener(name, catchCallback, false)
       }
-    }, 
+    },
     [name, callback]
   )
 

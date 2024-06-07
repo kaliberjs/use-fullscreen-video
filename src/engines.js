@@ -15,6 +15,13 @@ export default {
     enabled: "webkitFullscreenEnabled",
     onChangeEvent: "webkitfullscreenchange",
     onErrorEvent: "webkitfullscreenerror",
+
+    /**
+     * Fullscreen end has a different events on iOS.
+     * @see https://stackoverflow.com/questions/32228024/how-to-detect-ios-leaving-fullscreen-video
+     */
+    onEndEvent: "webkitendfullscreen",
+    onStartEvent: "webkitbeginfullscreen",
   },
   webkitDesktop: {
     request: "webkitRequestFullscreen",
@@ -23,6 +30,13 @@ export default {
     enabled: "webkitFullscreenEnabled",
     onChangeEvent: "webkitfullscreenchange",
     onErrorEvent: "webkitfullscreenerror",
+
+    /**
+     * Fullscreen end has a different events on macOS.
+     * @see https://stackoverflow.com/questions/32228024/how-to-detect-ios-leaving-fullscreen-video
+     */
+    onEndEvent: "webkitendfullscreen",
+    onStartEvent: "webkitbeginfullscreen",
   },
   mozilla: {
     request: "mozRequestFullscreen",

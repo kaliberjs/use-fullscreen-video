@@ -13,8 +13,11 @@ export function useFullscreenVideo({ onChange, onError, options = undefined }) {
 
   const { useVideoElement } = options ?? {}
 
-  useEventListener(id, keys.onChangeEvent, onChange)
-  useEventListener(id, keys.onErrorEvent, onError)
+  useEventListener({ id, name: keys.onChangeEvent, callback: onChange })
+  useEventListener({ id, name: keys.onErrorEvent, callback: onError })
+
+  useEventListener({ id, element: videoRef.current, name: keys.onStartEvent, callback: onChange })
+  useEventListener({ id, element: videoRef.current, name: keys.onEndEvent, callback: onChange })
 
   const onRequestEvent = useEvent(handleRequest)
   const onExitEvent = useEvent(handleExit)
@@ -77,7 +80,7 @@ export function useFullscreenVideo({ onChange, onError, options = undefined }) {
     if (!document[keys.element]) return
     return document[keys.exit]()?.catch(onError)
   }
-} 
+}
 
 function getMethodsForElement(x) {
   return Object.values(engines).find((methods) => (
