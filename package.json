@@ -19,5 +19,8 @@
   "private": false,
   "license": "MIT",
   "description": "Fullscreen videos, without all the hassle.",
-  "repository": "https://github.com/kaliberjs/use-fullscreen-video.git"
+  "repository": "https://github.com/kaliberjs/use-fullscreen-video.git",
+  "peerDependencies": {
+    "uuid": "^10.0.0"
+  }
 }
